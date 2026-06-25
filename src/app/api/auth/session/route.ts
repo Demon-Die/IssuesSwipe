@@ -1,7 +1,20 @@
 import { NextResponse } from 'next/server';
 import { getAdminAuth } from '@/lib/firebase/server';
+import { getSessionUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { cookies } from 'next/headers';
+
+export async function GET() {
+  try {
+    const user = await getSessionUser();
+    if (user) {
+      return NextResponse.json({ authenticated: true, user });
+    }
+    return NextResponse.json({ authenticated: false, user: null });
+  } catch (error) {
+    return NextResponse.json({ authenticated: false, user: null });
+  }
+}
 
 export async function POST(request: Request) {
   try {
