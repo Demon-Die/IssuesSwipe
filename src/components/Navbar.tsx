@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import GitHubAuthButton from './GitHubAuthButton';
 import { usePathname, useRouter } from 'next/navigation';
 import { Flame, GitBranch, LogOut, User as UserIcon, ShieldAlert, Sparkles, Menu, X } from 'lucide-react';
 
@@ -157,12 +158,11 @@ export default function Navbar() {
                 </div>
               </>
             ) : (
-              <Link
-                href="/api/auth/github"
+              <GitHubAuthButton
                 className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-white text-black hover:bg-gray-200 text-sm font-semibold transition-all shadow-md hover:shadow-lg"
               >
                 <span>Sign in with GitHub</span>
-              </Link>
+              </GitHubAuthButton>
             )}
           </div>
 

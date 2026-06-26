@@ -2,6 +2,7 @@
 
 import { useState, useEffect, ReactNode } from 'react';
 import Link from 'next/link';
+import GitHubAuthButton from './GitHubAuthButton';
 import { usePathname, useRouter } from 'next/navigation';
 import { 
   Compass, Heart, FileText, Bookmark, GitBranch, User as UserIcon, Settings, 
@@ -181,13 +182,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
           {/* Add GitHub Button (Shown if not logged in) */}
           {!user && (
-            <Link
-              href="/api/auth/github"
-              className="flex items-center justify-center space-x-2 w-full py-3 rounded-xl bg-brand-purple hover:bg-brand-purple/90 text-white font-bold text-sm shadow-md transition-all active:scale-98"
-            >
+            <GitHubAuthButton className="flex items-center justify-center space-x-2 w-full py-3 rounded-xl bg-brand-purple hover:bg-brand-purple/90 text-white font-bold text-sm shadow-md transition-all active:scale-98">
               <Plus className="h-4 w-4" />
               <span>Sign in with GitHub</span>
-            </Link>
+            </GitHubAuthButton>
           )}
 
           {user && (

@@ -8,6 +8,37 @@ export interface GitHubIssueSyncResult {
   message: string;
 }
 
+interface GitHubSearchNode {
+  id: string;
+  title: string;
+  url: string;
+  number: number;
+  body: string | null;
+  createdAt: string;
+  labels?: { nodes?: { name: string }[] };
+  repository?: {
+    id: string;
+    name: string;
+    url: string;
+    description: string | null;
+    stargazerCount: number;
+    owner: { login: string };
+    primaryLanguage?: { name: string };
+    object?: { text: string } | null;
+  };
+}
+
+interface GitHubGraphQLResponse {
+  data?: {
+    search?: {
+      edges?: {
+        node: GitHubSearchNode;
+      }[];
+    };
+  };
+  errors?: { message: string }[];
+}
+
 const GITHUB_SEARCH_QUERY = `
   query($queryString: String!) {
     search(query: $queryString, type: ISSUE, first: 30) {
@@ -98,7 +129,8 @@ export async function syncIssuesFromGitHub(
       throw new Error(`GitHub API returned status ${response.status}`);
     }
 
-    const { data, errors } = await response.json() as { data: any, errors?: { message: string }[] };
+    const responseBody = await response.json() as GitHubGraphQLResponse;
+    const { data, errors } = responseBody;
 
     if (errors && errors.length > 0) {
       throw new Error(`GraphQL errors: ${errors.map((e) => e.message).join(', ')}`);
