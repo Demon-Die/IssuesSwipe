@@ -119,6 +119,7 @@ model Notification {
   message   String
   type      String   @default("INFO") // INFO, SUCCESS, MATCH
   isRead    Boolean  @default(false)
+  linkUrl   String?
   createdAt DateTime @default(now())
 
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)

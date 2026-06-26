@@ -25,7 +25,8 @@ export async function POST() {
           userId: user.id,
           title: 'New Issues Found',
           message: `Found ${result.issuesSynced} new issues matching your tech stack.`,
-          type: 'SUCCESS'
+          type: 'SUCCESS',
+          linkUrl: '/swipe'
         }
       });
     }

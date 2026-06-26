@@ -349,7 +349,13 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                           notifications.map(n => (
                             <div 
                               key={n.id} 
-                              onClick={() => !n.isRead && markNotificationRead(n.id)}
+                              onClick={() => {
+                                if (!n.isRead) markNotificationRead(n.id);
+                                if (n.linkUrl) {
+                                  router.push(n.linkUrl);
+                                  setNotificationsOpen(false);
+                                }
+                              }}
                               className={`p-2.5 rounded-lg text-left transition-colors cursor-pointer ${n.isRead ? 'opacity-60 hover:bg-bg-pill' : 'bg-brand-purple/5 hover:bg-brand-purple/10'}`}
                             >
                               <p className="text-xs font-bold text-text-primary mb-0.5">{n.title}</p>
