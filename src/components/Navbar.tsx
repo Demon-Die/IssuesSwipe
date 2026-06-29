@@ -68,7 +68,7 @@ export default function Navbar() {
       <header className="sticky top-0 z-50 w-full border-b border-dark-border bg-dark-bg/80 backdrop-blur-md">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <Flame className="h-6 w-6 text-brand-red animate-pulse" />
+            <img src="/LogoIssueSwipeLight.png" alt="Logo" className="h-14 w-14 object-contain animate-pulse" />
             <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-brand-red to-brand-green bg-clip-text text-transparent">
               IssueSwipe
             </span>
@@ -86,9 +86,7 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href={session ? '/swipe' : '/'} className="flex items-center space-x-2 group">
-              <div className="p-1.5 rounded-lg bg-gradient-to-br from-brand-red/20 to-brand-green/20 group-hover:scale-105 transition-transform duration-200">
-                <Flame className="h-6 w-6 text-brand-red group-hover:text-brand-green transition-colors" />
-              </div>
+              <img src="/LogoIssueSwipeLight.png" alt="Logo" className="h-14 w-14 object-contain group-hover:scale-105 transition-transform duration-200" />
               <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-brand-red via-brand-purple to-brand-green bg-clip-text text-transparent">
                 IssueSwipe
               </span>
@@ -188,8 +186,9 @@ export default function Navbar() {
       </div>
 
       {/* Mobile Menu */}
-      {mobileMenuOpen && session && (
+      {mobileMenuOpen && (
         <div className="md:hidden glass border-b border-dark-border px-4 pt-2 pb-4 space-y-2 animate-in fade-in slide-in-from-top duration-200">
+<<<<<<< Updated upstream
           {navLinks.map((link) => {
             const Icon = link.icon;
             const isActive = pathname === link.href;
@@ -225,19 +224,68 @@ export default function Navbar() {
               <div className="text-left">
                 <p className="text-xs font-semibold text-text-primary">@{session.username}</p>
                 <p className="text-[10px] text-text-tertiary">{session.rank}</p>
+=======
+          {session ? (
+            <>
+              {navLinks.map((link) => {
+                const Icon = link.icon;
+                const isActive = pathname === link.href;
+                return (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                      isActive
+                        ? 'bg-brand-blue/10 text-brand-blue border border-brand-blue/20'
+                        : 'text-gray-400 hover:bg-dark-border hover:text-white'
+                    }`}
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span>{link.name}</span>
+                  </Link>
+                );
+              })}
+              <div className="pt-2 border-t border-dark-border flex items-center justify-between">
+                <Link
+                  href="/profile"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center space-x-2.5"
+                >
+                  {session.avatar ? (
+                    <img src={session.avatar} alt={session.username} className="h-8 w-8 rounded-full" />
+                  ) : (
+                    <div className="h-8 w-8 rounded-full bg-dark-border flex items-center justify-center text-xs font-bold">
+                      {session.username[0]?.toUpperCase()}
+                    </div>
+                  )}
+                  <div className="text-left">
+                    <p className="text-xs font-semibold text-gray-200">@{session.username}</p>
+                    <p className="text-[10px] text-gray-400">{session.rank}</p>
+                  </div>
+                </Link>
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    handleLogout();
+                  }}
+                  className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-sm text-brand-red hover:bg-brand-red/10 transition-all"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span>Logout</span>
+                </button>
+>>>>>>> Stashed changes
               </div>
-            </Link>
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                handleLogout();
-              }}
-              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-sm text-brand-red hover:bg-brand-red/10 transition-all"
-            >
-              <LogOut className="h-4 w-4" />
-              <span>Logout</span>
-            </button>
-          </div>
+            </>
+          ) : (
+            <div className="pt-2">
+              <GitHubAuthButton
+                className="flex items-center justify-center space-x-2 w-full px-4 py-3 rounded-lg bg-white text-black hover:bg-gray-200 text-sm font-semibold transition-all shadow-md"
+              >
+                <span>Sign in with GitHub</span>
+              </GitHubAuthButton>
+            </div>
+          )}
         </div>
       )}
     </header>

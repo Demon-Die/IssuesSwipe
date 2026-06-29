@@ -22,7 +22,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   
   const [sessionUser, setSessionUser] = useState<any>(null);
   const [recentMatches, setRecentMatches] = useState<any[]>([]);
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
   const [themeDropdownOpen, setThemeDropdownOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [showAllSkills, setShowAllSkills] = useState(false);
@@ -32,18 +32,21 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   // Initialize theme from localStorage and apply
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    setTheme(savedTheme as 'light' | 'dark');
-    if (savedTheme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
+    try {
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      setTheme(savedTheme as 'light' | 'dark');
+    } catch (e) {
+      setTheme('dark');
     }
   }, []);
 
   const handleThemeChange = (newTheme: 'light' | 'dark') => {
     setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
+    try {
+      localStorage.setItem('theme', newTheme);
+    } catch (e) {
+      console.warn('localStorage not available');
+    }
     if (newTheme === 'dark') {
       document.documentElement.classList.add('dark');
     } else {
@@ -150,13 +153,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       <aside className="w-64 bg-dark-card border-r border-dark-border flex flex-col justify-between shrink-0 hidden lg:flex sticky top-0 h-screen p-5">
         <div className="space-y-6 overflow-y-auto pr-1">
           {/* Logo Brand */}
-          <Link href="/" className="flex items-center space-x-2 px-1 hover:opacity-80 transition-opacity">
-            <div className="p-2 rounded-xl bg-brand-purple/10 text-brand-purple">
-              <svg className="h-6 w-6 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="2.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
-              </svg>
-            </div>
-            <div className="leading-tight">
+          <Link href="/" className="flex items-center space-x-1 px-1 hover:opacity-80 transition-opacity">
+            <img src="/LogoIssueSwipeLight.png" alt="IssueSwipe Logo" className="h-20 w-20 object-contain translate-y-1" />
+            <div className="leading-tight -ml-1">
               <h1 className="text-sm font-bold text-text-primary tracking-tight">Open Source</h1>
               <p className="text-lg font-black text-brand-purple tracking-tight leading-none">IssueSwipe</p>
             </div>
@@ -264,37 +263,20 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           )}
         </div>
 
-        {/* Bottom Theme Dropdown */}
-        <div className="relative pt-3 border-t border-dark-border">
+        {/* Bottom Theme Toggle */}
+        <div className="pt-3 border-t border-dark-border">
           <button
-            onClick={() => setThemeDropdownOpen(!themeDropdownOpen)}
-            className="flex items-center justify-between w-full px-3 py-2 rounded-xl bg-bg-pill text-text-secondary hover:text-brand-purple text-xs font-bold border border-dark-border/60 cursor-pointer transition-all"
+            onClick={() => handleThemeChange(theme === 'light' ? 'dark' : 'light')}
+            className="flex items-center justify-between w-full px-3 py-2 rounded-xl bg-bg-pill text-text-secondary hover:text-brand-purple text-xs font-bold border border-dark-border/60 cursor-pointer transition-all active:scale-95"
           >
             <div className="flex items-center space-x-2">
               {theme === 'light' ? <Sun className="h-4 w-4 text-orange-500" /> : <Moon className="h-4 w-4 text-brand-purple" />}
-              <span className="capitalize">{theme} Theme</span>
+              <span>Dark Mode</span>
             </div>
-            <ChevronDown className="h-3 w-3 opacity-60" />
+            <div className={`flex items-center h-5 w-9 rounded-full relative transition-colors duration-300 ${theme === 'dark' ? 'bg-brand-purple' : 'bg-dark-border'}`}>
+              <div className={`absolute top-0.5 h-4 w-4 rounded-full bg-white transition-transform duration-300 ${theme === 'dark' ? 'translate-x-4.5' : 'translate-x-0.5'}`} />
+            </div>
           </button>
-
-          {themeDropdownOpen && (
-            <div className="absolute bottom-12 left-0 right-0 bg-dark-card border border-dark-border rounded-xl shadow-lg p-1.5 space-y-1 z-50">
-              <button
-                onClick={() => handleThemeChange('light')}
-                className="flex items-center space-x-2 w-full px-2.5 py-2 rounded-lg hover:bg-bg-pill text-xs font-bold text-text-secondary hover:text-brand-purple text-left"
-              >
-                <Sun className="h-4 w-4 text-orange-500" />
-                <span>Light</span>
-              </button>
-              <button
-                onClick={() => handleThemeChange('dark')}
-                className="flex items-center space-x-2 w-full px-2.5 py-2 rounded-lg hover:bg-bg-pill text-xs font-bold text-text-secondary hover:text-brand-purple text-left"
-              >
-                <Moon className="h-4 w-4 text-brand-purple" />
-                <span>Dark</span>
-              </button>
-            </div>
-          )}
         </div>
       </aside>
 
@@ -304,7 +286,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         {/* Top Header Bar */}
         <header className="h-16 border-b border-dark-border bg-dark-card/85 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-40">
           {/* Mobile hamburger placeholder or spacer */}
-          <div className="flex items-center lg:hidden">
+          <div className="flex items-center space-x-2 lg:hidden">
+            <img src="/LogoIssueSwipeLight.png" alt="IssueSwipe Logo" className="h-12 w-12 object-contain" />
             <span className="font-extrabold text-brand-purple">IssueSwipe</span>
           </div>
 

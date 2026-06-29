@@ -261,7 +261,7 @@ export default function LandingPage() {
       <footer className="border-t border-dark-border py-8 text-center text-xs text-gray-500 bg-dark-bg relative z-10">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="flex items-center space-x-2">
-            <Flame className="h-4 w-4 text-brand-red" />
+            <img src="/LogoIssueSwipeLight.png" alt="Logo" className="h-12 w-12 object-contain grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all duration-300" />
             <span className="font-extrabold bg-gradient-to-r from-brand-red to-brand-green bg-clip-text text-transparent">IssueSwipe © 2026</span>
           </div>
           <p className="text-gray-600">Built as a staff engineering project for rapid Open Source discovery.</p>
