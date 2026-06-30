@@ -15,10 +15,15 @@ export default function LandingPage() {
   const handleSignIn = async () => {
     try {
       setIsLoading(true);
-      const provider = new GithubAuthProvider();
-      const result = await signInWithPopup(auth, provider);
-      
-      const idToken = await result.user.getIdToken();
+
+      let idToken = '';
+      if (process.env.NEXT_PUBLIC_DEV_MODE === 'true') {
+        idToken = 'mock_developer_token';
+      } else {
+        const provider = new GithubAuthProvider();
+        const result = await signInWithPopup(auth, provider);
+        idToken = await result.user.getIdToken();
+      }
       
       const res = await fetch('/api/auth/session', {
         method: 'POST',
