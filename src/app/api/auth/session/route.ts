@@ -133,8 +133,11 @@ export async function POST(request: Request) {
     }
     
     return NextResponse.json({ success: true, isNew });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Session error', error);
-    return NextResponse.json({ error: 'Failed to create session' }, { status: 401 });
+    return NextResponse.json({ 
+      error: 'Failed to create session', 
+      details: error?.message || String(error)
+    }, { status: 401 });
   }
 }
